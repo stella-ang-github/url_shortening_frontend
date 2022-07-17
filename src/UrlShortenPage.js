@@ -122,21 +122,24 @@ const UrlShorten = () => {
 export default UrlShorten;
 
 const StyledSpan = styled.span`
-  @media only screen and (max-width: 359px) {
+  @media only screen and (min-width: 280px) {
     width: 130px;
     font-size: 10px;
   }
-  @media only screen and (min-width: 360px && max-width: 419px) {
+  @media only screen and (min-width: 360px) {
     width: 190px;
     font-size: 10px;
   }
-  @media only screen and (min-width: 420px && max-width: 700px) {
-    width: 220px;
+  @media only screen and (min-width: 420px) {
+    width: 215px;
+    font-size: 12px;
+  }
+  @media only screen and (min-width: 700px) {
+    width: 340px;
+    font-size: 12px;
   }
   padding-left: 5px;
-  font-size: 12px;
   display: inline-block;
-  width: 340px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
