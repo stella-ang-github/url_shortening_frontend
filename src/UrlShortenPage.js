@@ -93,7 +93,7 @@ const UrlShorten = () => {
                     Copy
                   </StyledCopyButton>
                 </StyledDiv>
-                {copiedSuccess ? (
+                {copiedSuccess && (
                   <Snackbar
                     open={copiedSuccess}
                     autoHideDuration={1500}
@@ -103,7 +103,7 @@ const UrlShorten = () => {
                       Link copied!
                     </Alert>
                   </Snackbar>
-                ) : null}
+                )}
               </StyledStack>
             </>
           )}
@@ -122,8 +122,24 @@ const UrlShorten = () => {
 export default UrlShorten;
 
 const StyledSpan = styled.span`
+  @media only screen and (max-width: 359px) {
+    width: 130px;
+    font-size: 10px;
+  }
+  @media only screen and (min-width: 360px && max-width: 419px) {
+    width: 190px;
+    font-size: 10px;
+  }
+  @media only screen and (min-width: 420px && max-width: 700px) {
+    width: 220px;
+  }
   padding-left: 5px;
   font-size: 12px;
+  display: inline-block;
+  width: 340px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 const StyledDiv = styled.div`
   background-color: #eee2dc;
