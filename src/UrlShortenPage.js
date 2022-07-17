@@ -5,20 +5,23 @@ import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 import urlPic from "../src/img/link.png";
 import Button from "@mui/material/Button";
-import validator from "validator";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import createShortenURL from "./api/urlAPI";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 const UrlShorten = () => {
   const [url, setUrl] = useState("");
   const [invalidInput, setInvalidInput] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [shortenLink, setShortenLink] = useState("");
+  const [copiedSuccess, setCopiedSuccess] = useState(false);
 
   const onSubmit = async () => {
+    setCopiedSuccess(false);
     setIsLoading(true);
-    if (!validator.isURL(url)) {
+    if (!urlPatternValidation(url)) {
       setInvalidInput(true);
       return;
     }
@@ -29,12 +32,28 @@ const UrlShorten = () => {
     });
   };
 
+  var urlPatternValidation = (URL) => {
+    const regex = new RegExp(
+      "(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?"
+    );
+    return regex.test(URL);
+  };
+
   const onChange = (val) => {
     setInvalidInput(false);
-    if (!validator.isURL(val.target.value)) {
+    if (!urlPatternValidation(val.target.value)) {
       setInvalidInput(true);
     }
     setUrl(val.target.value);
+  };
+
+  const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  });
+
+  const onClickCopied = () => {
+    navigator.clipboard.writeText(shortenLink);
+    setCopiedSuccess(true);
   };
 
   return (
@@ -51,7 +70,11 @@ const UrlShorten = () => {
               onChange={onChange}
               color={invalidInput ? "warning" : "primary"}
             />
-            <StyledButton onClick={onSubmit} variant="contained">
+            <StyledButton
+              disabled={invalidInput}
+              onClick={onSubmit}
+              variant="contained"
+            >
               Shorten
             </StyledButton>
           </StyledStack>
@@ -66,13 +89,21 @@ const UrlShorten = () => {
                 <StyledDiv>
                   <StyledSpan>{shortenLink}</StyledSpan>
                   &nbsp; &nbsp;
-                  <StyledCopyButton
-                    variant="contained"
-                    onClick={navigator.clipboard.writeText(shortenLink)}
-                  >
+                  <StyledCopyButton variant="contained" onClick={onClickCopied}>
                     Copy
                   </StyledCopyButton>
                 </StyledDiv>
+                {copiedSuccess ? (
+                  <Snackbar
+                    open={copiedSuccess}
+                    autoHideDuration={1500}
+                    onClose={() => setCopiedSuccess(false)}
+                  >
+                    <Alert severity="success" sx={{ width: "100%" }}>
+                      Link copied!
+                    </Alert>
+                  </Snackbar>
+                ) : null}
               </StyledStack>
             </>
           )}
